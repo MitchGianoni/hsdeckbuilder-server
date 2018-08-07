@@ -1,5 +1,3 @@
-'use strict';
-
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
@@ -21,6 +19,12 @@ app.use(
     origin: CLIENT_ORIGIN
   })
 );
+
+app.get('/api/cards', function (req, res) {
+  return res.json([
+    'one', 'two'
+  ]);
+});
 
 function runServer(port = PORT) {
   const server = app
