@@ -9,8 +9,8 @@ module.exports = {
   //       process.env.TEST_DATABASE_URL ||
   //       'mongodb://localhost/thinkful-backend-test'
   DATABASE_URL:
-      process.env.DATABASE_URL || 'postgres://localhost/thinkful-backend',
+      process.env.DATABASE_URL || 'postgres://localhost/deckbuilder',
   TEST_DATABASE_URL:
       process.env.TEST_DATABASE_URL ||
-      'postgres://localhost/thinkful-backend-test'
+      'postgres://localhost/deckbuilder-test'
 };

@@ -1,10 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-
 const { PORT, CLIENT_ORIGIN } = require('./config');
 //const { dbConnect } = require('./db-mongoose');
-const { dbConnect } = require('./db-knex');
+const { dbConnect, dbGet } = require('./db-knex');
+const knex = require('knex');
 
 const app = express();
 
@@ -20,10 +20,12 @@ app.use(
   })
 );
 
-app.get('/api/cards', function (req, res) {
-  return res.json([
-    'one', 'two'
-  ]);
+app.get('/api/cards', function (req, res, next) {
+  dbGet().select('data').from('cards').where('id', 1)
+    .then(result => {
+      res.json(result);
+    })
+    .catch(err => next(err));
 });
 
 function runServer(port = PORT) {
