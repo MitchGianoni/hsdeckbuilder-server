@@ -3,6 +3,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect, dbGet } = require('./db-knex');
+const usersRouter = require('./routes/users');
 // Create an Express application
 const app = express();
 // Log all requests unless in test
@@ -18,14 +19,33 @@ app.use(
   })
 );
 
-app.get('/api/cards', function (req, res, next) {
-  dbGet().select('data').from('cards').where('id', 1)
+app.use(express.json());
+
+app.get('/api/cards', (req, res, next) => {
+  dbGet().select('data').from('cards')
     .then(result => {
       res.json(result);
     })
     .catch(err => next(err));
 });
 
+// app.get('/api/cards/:id', (req, res, next) => {
+//   dbGet().first(dbGet.raw("data->'id' as id"))
+//     .whereRaw("data->'id'", [results[0].data.id])
+//     .from('cards')
+//     .then(result => {
+//       if(result) {
+//         res.json(result);
+//       } else {
+//         next();
+//       }
+//     })
+//     .catch(err => { next(err); });
+// });
+
+app.use('/api/users', usersRouter);
+
+// Custom 404 Not Found route handler
 app.use((req, res, next) => {
   const err = new Error('Not Found');
   err.status = 404;
