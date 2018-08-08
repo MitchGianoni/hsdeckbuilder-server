@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { dbGet } = require('../db-knex');
 const emailValidator = require('email-validator');
+const hashPassword = require('../models/users');
 
 // GET all users
 router.get('/', (req, res, next) => {
@@ -13,8 +14,23 @@ router.get('/', (req, res, next) => {
     .catch(err => next(err));
 });
 
+// GET user by ID
+router.get('/:id', (req, res, next) => {
+  const {id} = req.params;
+  dbGet().select('id', 'username', 'email')
+    .from('users').where('id', id)
+    .then(([user]) => {
+      if(user) {
+        res.json(user);
+      } else {
+        next();
+      }
+    })
+    .catch(err => next(err));
+});
+
 // POST to Create a user
-router.post('/users', (req, res, next) => {
+router.post('/', (req, res, next) => {
   let { username, password, email } = req.body;
   const requiredFields = ['username', 'password', 'email'];
   const missingField = requiredFields.find(field => !(field in req.body));
@@ -93,7 +109,34 @@ router.post('/users', (req, res, next) => {
     });
   }
 
-  console.log(req.body);
+  dbGet().select()
+    .from('users').count('username').where('username', username)
+    .then(([_count]) => {
+      const { count } = _count;
+      console.log('Count', count);
+      if (count > 0) {
+        return Promise.reject({
+          code: 422,
+          reason: 'ValidationError',
+          message: 'Username already taken',
+          location: 'username'
+        });
+      }
+      return hashPassword(password, 10);
+    })
+    .then(hash => {
+      const newUser = {
+        username,
+        password: hash,
+        email
+      };
+      return dbGet().insert(newUser).select('users').into('users')
+        .returning(['username', 'id'])
+        .then(([result]) => {
+          res.status(201).json(result);
+        })
+        .catch(err => next(err));
+    });
 
 });
 
