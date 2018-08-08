@@ -4,4 +4,9 @@ function hashPassword(password) {
   return bcrypt.hash(password, 10);
 }
 
-module.exports = hashPassword;
+function validatePassword(password) {
+  return password === this.password;
+}
+
+module.exports = hashPassword, validatePassword;
+

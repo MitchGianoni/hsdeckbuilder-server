@@ -83,7 +83,7 @@ router.post('/', (req, res, next) => {
       req.body[field].trim().length < sizedFields[field].min);
   const tooLargeField = Object.keys(sizedFields).find(
     field => 'max' in sizedFields[field] &&
-      req.body[field].trim().length < sizedFields[field].min);
+      req.body[field].trim().length > sizedFields[field].max);
 
   if (tooSmallField || tooLargeField) {
     return res.status(422).json({
@@ -136,7 +136,7 @@ router.post('/', (req, res, next) => {
           res.status(201).json(result);
         })
         .catch(err => next(err));
-    });
+    }).catch(err => next(err));
 
 });
 
