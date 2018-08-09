@@ -11,8 +11,8 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/:id', (req, res, next) => {
-  dbGet().first(dbGet().raw("*"))
-    .whereRaw("data->>'id'=? ", [req.params.id])
+  dbGet().first(dbGet().raw('*'))
+    .whereRaw('data->>\'id\'=? ', [req.params.id])
     .from('cards')
     .then(result => {
       if(result) {
