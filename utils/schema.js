@@ -20,12 +20,33 @@ file.readFile('cards.json', 'utf8', function read(err, data) {
 });
 
 const schemaCreation = function() {
-
-  return knex.schema.dropTableIfExists('cards')
+  return knex.schema.dropTableIfExists('cards_decks')
+    .then(function() {
+      return knex.schema.dropTableIfExists('decks');
+    })
+    .then(function() {
+      return knex.schema.dropTableIfExists('cards');
+    })
     .then(function() {
       return knex.schema.createTable('cards', function(table){
+        table.string('id').unique().notNullable();
+        table.string('class');
         table.json('data').nullable();
       });
+    })
+    .then(function() {
+      return knex.schema.createTable('decks', function(table) {
+        table.increments('id').primary();
+        table.integer('user_id').references('users.id').onDelete('CASCADE');
+        table.string('name').notNullable().defaultTo('');
+        table.string('class').notNullable();
+      });
+    })
+    .then(function() {
+      return knex.schema.createTable('cards_decks', function(table) {
+        table.string('card_id').notNullable().references('cards.id');
+        table.integer('deck_id').notNullable().references('decks.id').onDelete('CASCADE');
+      })
     });
 };
 
@@ -33,7 +54,7 @@ const inserts = function() {
   const insertPromises = [];
   cards.forEach(function(card) {
     insertPromises.push(knex('cards')
-      .insert({data: JSON.stringify(card)})
+      .insert({id: card.id, class: card.class, data: JSON.stringify(card)})
     );
   });
   return Promise.all(insertPromises);
