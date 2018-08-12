@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect, dbGet } = require('./db-knex');
 const cardsRouter = require('./routes/cards');
+const decksRouter = require('./routes/decks');
 const usersRouter = require('./routes/users');
 // Create an Express application
 const app = express();
@@ -23,6 +24,7 @@ app.use(
 app.use(express.json());
 
 app.use('/api/cards', cardsRouter);
+app.use('/api/decks', decksRouter);
 app.use('/api/users', usersRouter);
 
 // Custom 404 Not Found route handler

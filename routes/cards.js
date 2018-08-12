@@ -2,14 +2,16 @@ const express = require('express');
 const router = express.Router();
 const { dbGet } = require('../db-knex');
 
+// GET all cards
 router.get('/', (req, res, next) => {
-  dbGet().select('data').from('cards')
+  dbGet().select('*').from('cards')
     .then(result => {
       res.json(result);
     })
     .catch(err => next(err));
 });
 
+// GET card by ID (Each card object has an ID, use that)
 router.get('/:id', (req, res, next) => {
   dbGet().first(dbGet().raw('*'))
     .whereRaw('data->>\'id\'=? ', [req.params.id])
