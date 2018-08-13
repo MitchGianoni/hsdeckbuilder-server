@@ -1,13 +1,19 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const passport = require('passport');
+const {localStrategy} = require('./passport/local');
+const {jwtStrategy} = require('./passport/jwt');
 const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect, dbGet } = require('./db-knex');
+const authRouter = require('./routes/auth');
 const cardsRouter = require('./routes/cards');
 const decksRouter = require('./routes/decks');
 const usersRouter = require('./routes/users');
+
 // Create an Express application
 const app = express();
+
 // Log all requests unless in test
 app.use(
   morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
@@ -21,10 +27,17 @@ app.use(
   })
 );
 
+// Parse request 
 app.use(express.json());
 
+// Passport Strategies
+passport.use(localStrategy);
+passport.use(jwtStrategy);
+
+// Mount Routers 
 app.use('/api/cards', cardsRouter);
 app.use('/api/decks', decksRouter);
+app.use('/api/login', authRouter);
 app.use('/api/users', usersRouter);
 
 // Custom 404 Not Found route handler

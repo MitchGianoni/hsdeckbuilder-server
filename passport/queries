@@ -1,0 +1,14 @@
+CREATE TABLE cards_decks (
+  card_id VARCHAR(10) NOT NULL DEFAULT 0,
+  deck_id INT NOT NULL DEFAULT 0,
+  FOREIGN KEY (card_id) REFERENCES cards(id),
+  FOREIGN KEY (deck_id) REFERENCES decks(id) ON DELETE CASCADE
+);
+
+CREATE TABLE decks (
+  id INT UNIQUE NOT NULL DEFAULT 0,
+  user_id INT NOT NULL DEFAULT 0,
+  name VARCHAR(40),
+  class VARCHAR(10), 
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);

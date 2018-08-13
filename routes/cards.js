@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { dbGet } = require('../db-knex');
+const passport = require('passport');
+
+// Use authentication
+router.use('/', passport.authenticate('jwt', { session: false }));
 
 // GET all cards
 router.get('/', (req, res, next) => {

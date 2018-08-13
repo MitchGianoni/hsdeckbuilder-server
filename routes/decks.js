@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { dbGet } = require('../db-knex');
+const passport = require('passport');
+
+// Use authentication
+router.use('/', passport.authenticate('jwt', { session: false }));
 
 // GET all decks
 router.get('/', (req, res, next) => {
@@ -61,8 +65,21 @@ router.post('/', (req, res, next) => {
 
 });
 
+// DELETE a deck
+router.delete('/:deckId', (req, res, next) => {
+  const deckId = req.params.deckId;
+
+  dbGet().del().from('decks').where('id', deckId)
+    .then(() => {
+      res.status(204).end();
+    })
+    .catch(err => { next(err); });
+});
+
+// ==============================================================
+
 // GET all cards in a deck
-router.get('/:deckId', (req, res, next) => {
+router.get('/:deckId/cards', (req, res, next) => {
   const deckId = req.params.deckId;
 
   dbGet().select('*').from('cards_decks').where('deckId', deckId)
@@ -78,7 +95,7 @@ router.post('/:deckId/cards', (req, res, next) => {
   const cardId = req.body.cardId;
 
   const cardToAdd = { deckId, cardId }; 
-
+  
   dbGet().insert(cardToAdd).into('cards_decks')
     .returning(['deckId', 'cardId'])
     .then(([result]) => {
@@ -86,5 +103,19 @@ router.post('/:deckId/cards', (req, res, next) => {
     })
     .catch(err => next(err));
 });
+
+// DELETE a card from a deck
+router.delete('/:deckId/cards/:cardId', (req, res, next) => {
+  const { deckId, cardId } = req.params;
+
+  dbGet().del().from('cards_decks').where('deck_id', deckId)
+    .andWhere('card_id', cardId)
+    .then(() => {
+      res.status(204).end();
+    })
+    .catch(err => { next(err); });
+});
+
+
 
 module.exports = router;
