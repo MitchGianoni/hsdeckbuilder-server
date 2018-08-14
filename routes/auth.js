@@ -24,7 +24,7 @@ router.post('/', localAuth, (req, res) => {
 });
 
 // Refresh endpoint
-router.post('/refresh', jwtAuth, (req, res) => {
+router.post('/api/refresh', jwtAuth, (req, res) => {
   const authToken = createAuthToken(req.user);
   res.json({ authToken });
 });
