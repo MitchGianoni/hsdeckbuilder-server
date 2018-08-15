@@ -17,8 +17,8 @@ router.get('/', (req, res, next) => {
 
 // POST to Create a deck
 router.post('/', (req, res, next) => {
-  let { deckClass, deckName } = req.body;
-  const requiredFields = ['deckName'];
+  let { user_id, deckClass, deckName } = req.body;
+  const requiredFields = ['deckName', 'user_id'];
   const missingField = requiredFields.find(field => !(field in req.body));
 
   if (missingField) {
@@ -54,7 +54,7 @@ router.post('/', (req, res, next) => {
     });
   }
 
-  const newDeck = { /*user_id,*/ deckClass, deckName };
+  const newDeck = { user_id, deckClass, deckName };
 
   dbGet().insert(newDeck).into('decks')
     .returning(['deckName', 'deckClass'])
