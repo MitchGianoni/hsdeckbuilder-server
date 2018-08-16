@@ -8,7 +8,8 @@ router.use('/', passport.authenticate('jwt', { session: false }));
 
 // GET all decks
 router.get('/', (req, res, next) => {
-  dbGet().select('*').from('decks')
+  const user_id = req.user.id;
+  dbGet().select('*').from('decks').where('user_id', user_id)
     .then(result => {
       res.json(result);
     })
