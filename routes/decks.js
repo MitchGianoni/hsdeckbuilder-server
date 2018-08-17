@@ -80,10 +80,10 @@ router.delete('/:deckId', (req, res, next) => {
 // ==============================================================
 
 // GET all cards in a deck
-router.get('/:deckId/cards', (req, res, next) => {
-  const deckId = req.params.deckId;
+router.get('/:deck_id/cards', (req, res, next) => {
+  const deck_id = req.params.deckId;
 
-  dbGet().select('*').from('cards_decks').where('deckId', deckId)
+  dbGet().select('*').from('cards_decks').where('deck_id', deck_id)
     .then(result => {
       res.json(result);
     })
@@ -91,14 +91,14 @@ router.get('/:deckId/cards', (req, res, next) => {
 });
 
 // POST to add a card to a deck
-router.post('/:deckId/cards', (req, res, next) => {
-  const deckId = req.params.deckId;
-  const cardId = req.body.cardId;
+router.post('/:deck_id/cards', (req, res, next) => {
+  const deck_id = req.params.deck_id;
+  const {card_id, rarity} = req.body;
 
-  const cardToAdd = { deckId, cardId }; 
+  const cardToAdd = { deck_id, card_id, rarity }; 
   
   dbGet().insert(cardToAdd).into('cards_decks')
-    .returning(['deckId', 'cardId'])
+    .returning(['deck_id', 'card_id'])
     .then(([result]) => {
       res.status(201).json(result);
     })

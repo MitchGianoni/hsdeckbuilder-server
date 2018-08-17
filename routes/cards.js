@@ -8,7 +8,7 @@ router.use('/', passport.authenticate('jwt', { session: false }));
 
 // GET all cards
 router.get('/', (req, res, next) => {
-  dbGet().select('*').from('cards')
+  dbGet().select('*').from('cards').orderBy('name', 'asc')
     .then(result => {
       res.json(result);
     })
