@@ -81,8 +81,7 @@ router.delete('/:deckId', (req, res, next) => {
 
 // GET all cards in a deck
 router.get('/:deck_id/cards', (req, res, next) => {
-  const deck_id = req.params.deckId;
-
+  const deck_id = req.params.deck_id;
   dbGet().select('*').from('cards_decks').where('deck_id', deck_id)
     .then(result => {
       res.json(result);
