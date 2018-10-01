@@ -77,6 +77,20 @@ router.delete('/:deckId', (req, res, next) => {
     .catch(err => { next(err); });
 });
 
+// UPDATE a deck (rename)
+router.put('/:deckId', (req, res, next) => {
+  const deckId = req.params.deckId;
+  const deckName = req.body.deckName;
+  console.log('req:', req.body.deckName);
+
+  dbGet().select().from('decks').where('id', deckId).update({deckName})
+    .returning(['id','deckName'])
+    .then(([result]) =>{
+      res.json(result);
+    })
+    .catch(err => next(err));
+});
+
 // ==============================================================
 
 // GET all cards in a deck
