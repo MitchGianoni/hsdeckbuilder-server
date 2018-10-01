@@ -109,7 +109,7 @@ router.delete('/:deckId/cards/:cardId', (req, res, next) => {
   const { deckId, cardId } = req.params;
 
   dbGet().del().from('cards_decks').where('deck_id', deckId)
-    .andWhere('card_id', cardId)
+    .andWhere('id', cardId)
     .then(() => {
       res.status(204).end();
     })
