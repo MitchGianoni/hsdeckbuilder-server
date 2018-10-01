@@ -47,6 +47,7 @@ const schemaCreation = function() {
     })
     .then(function() {
       return knex.schema.createTable('cards_decks', function(table) {
+        table.increments('id').primary();
         table.integer('deck_id').notNullable().references('decks.id').onDelete('CASCADE');
         table.string('card_id').notNullable().references('cards.id');
         table.string('rarity').notNullable();
