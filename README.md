@@ -14,4 +14,7 @@ To setup database simply run:
 `node utils/schema.js` 
   to set up tables for cards, decks and cards_decks, and seed your card data into postgres
 
-*More to come*
+## Live application
+
+Heroku: https://hs-deckbuilder-mg.herokuapp.com/
+Client Repo: https://github.com/MitchGianoni/hsdeckbuilder-client
