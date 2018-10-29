@@ -4,13 +4,13 @@ const file = require('fs');
 const knex = require('knex')({
   client: 'pg',
   connection: 
-    {
-    user: 'Mitch',
-    database: 'deckbuilder',
-    port: 5432,
-    host: 'localhost',},
-  // 'postgres://stbskstsmoowxh:45259bb33119c8ba22641959aac97c8f0f457eab412ba798dc3b2349fea74e6f@ec2-54-225-76-201.compute-1.amazonaws.com:5432/ddsufba3pcp71' 
-  // + '?ssl=true',
+    // {
+    // user: 'Mitch',
+    // database: 'deckbuilder',
+    // port: 5432,
+    // host: 'localhost',},
+  'postgres://stbskstsmoowxh:45259bb33119c8ba22641959aac97c8f0f457eab412ba798dc3b2349fea74e6f@ec2-54-225-76-201.compute-1.amazonaws.com:5432/ddsufba3pcp71' 
+  + '?ssl=true',
   debug: false
 });
 

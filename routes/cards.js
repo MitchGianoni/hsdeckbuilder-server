@@ -2,6 +2,17 @@ const express = require('express');
 const router = express.Router();
 const { dbGet } = require('../db-knex');
 const passport = require('passport');
+const bypassAuth = passport.authenticate('bypasstoken');
+
+// GET random card!
+router.get('/random', (req, res, next) => {
+  dbGet().select('*').from('cards')
+    .orderBy(dbGet().raw('RANDOM()'))
+    .limit(2)
+    .then(result => {
+      res.json(result);
+    });
+});
 
 // Use authentication
 router.use('/', passport.authenticate('jwt', { session: false }));
