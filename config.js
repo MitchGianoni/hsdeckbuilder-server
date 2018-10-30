@@ -2,7 +2,7 @@ require('dotenv').config();
 
 module.exports = {
   PORT: process.env.PORT || 8080,
-  CLIENT_ORIGIN: process.env.CLIENT_ORIGIN || 'http://localhost:3000',
+  CLIENT_ORIGIN: process.env.CLIENT_ORIGIN || 'http://localhost:3000' || process.env.CLIENT_ORIGIN2,
   DATABASE_URL:
       process.env.DATABASE_URL || 'postgres://localhost/deckbuilder',
   TEST_DATABASE_URL:
