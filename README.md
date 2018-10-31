@@ -16,7 +16,7 @@ To setup database simply run:
 
 ## Live application
 
-Heroku: https://hs-deckbuilder-mg.herokuapp.com/
+Live site: https://hsdeckbuilder.netlify.com/
 Client Repo: https://github.com/MitchGianoni/hsdeckbuilder-client
 
 ## Routes
